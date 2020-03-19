@@ -14,5 +14,6 @@
         <property name="hibernate.enable_lazy_load_no_trans">true</property>
         <property name="show_sql">true</property>
         <mapping class="kg.itacademy.entities.Employee"/>
+        <mapping class="kg.itacademy.entities.EmployeeAddress"/>
     </session-factory>
 </hibernate-configuration>
