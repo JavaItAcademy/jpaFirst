@@ -1,5 +1,6 @@
 package kg.itacademy;
 
+import kg.itacademy.entities.Department;
 import kg.itacademy.entities.Employee;
 import kg.itacademy.entities.EmployeeAddress;
 import kg.itacademy.util.HibernateUtil;
@@ -16,22 +17,28 @@ public class App
 {
     public static void main( String[] args )
     {
-        Employee e1 = new Employee(3, "I am 3", 19);
-        Employee e2 = new Employee(4, "I am 4", 28);
-        EmployeeAddress address = new EmployeeAddress(4,"Bishkek");
-        create(address);
-        e2.setEmployeeAddress(address);
+        Employee e1 = new Employee("I am 3", 19);
+        Employee e2 = new Employee("I am 4", 28);
+        Department itDepartment = new Department("IT");
+        Department marketingDepartment = new Department("Marketing");
+
+        EmployeeAddress employeeAddress1 = new EmployeeAddress();
+        employeeAddress1.setAddress("Bishkek");
+        EmployeeAddress employeeAddress2 = new EmployeeAddress();
+        employeeAddress2.setAddress("Osh");
+
+        e1.setEmployeeAddress(employeeAddress1);
+        e2.setEmployeeAddress(employeeAddress2);
+        e1.setDepartment(itDepartment);
+        e2.setDepartment(marketingDepartment);
+        create(itDepartment);
+        create(marketingDepartment);
+        create(e1);
         create(e2);
-        //Employee e3 = new Employee(5, "I am 5", 52);
-//
-//        create(e1);
-//        create(e2);
-//        create(e3);
-//        e2.setName("NEW NAME2");
-//        update(e2);
-//        deleteById(1);
-        deleteAll();
-        HibernateUtil.shutdown();
+        System.out.println(getAll());
+
+
+        //HibernateUtil.shutdown();
     }
 
     public static <T> void create(T entity) {

@@ -1,26 +1,19 @@
 package kg.itacademy.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "employee_address")
 public class EmployeeAddress {
     @Id
-    @Column(name = "id_employee")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "address")
     private String address;
 
     public EmployeeAddress() {
-    }
-
-    public EmployeeAddress(Integer id, String address) {
-        this.id = id;
-        this.address = address;
     }
 
     public Integer getId() {
@@ -30,6 +23,7 @@ public class EmployeeAddress {
     public void setId(Integer id) {
         this.id = id;
     }
+
 
     public String getAddress() {
         return address;
