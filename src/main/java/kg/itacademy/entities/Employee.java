@@ -25,13 +25,20 @@ public class Employee {
     @JoinColumn(name = "id_department", referencedColumnName = "id")
     private Department department;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_country", referencedColumnName = "id")
+    private Country country;
+
+    @Column(name = "salary")
+    private Integer salary;
 
     public Employee() {
     }
 
-    public Employee(String name, Integer age) {
+    public Employee(String name, Integer age, Integer salary) {
         this.name = name;
         this.age = age;
+        this.salary = salary;
     }
 
     public Department getDepartment() {
@@ -76,6 +83,22 @@ public class Employee {
         return age;
     }
 
+    public Integer getSalary() {
+        return salary;
+    }
+
+    public void setSalary(Integer salary) {
+        this.salary = salary;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
     public void setAge(Integer age) {
         this.age = age;
     }
@@ -86,7 +109,7 @@ public class Employee {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", age=" + age +
-                ", employeeAddress=" + employeeAddress +
+                ", salary=" + salary +
                 '}';
     }
 }

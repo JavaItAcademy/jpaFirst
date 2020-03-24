@@ -16,5 +16,6 @@
         <mapping class="kg.itacademy.entities.Employee"/>
         <mapping class="kg.itacademy.entities.EmployeeAddress"/>
         <mapping class="kg.itacademy.entities.Department"/>
+        <mapping class="kg.itacademy.entities.Country"/>
     </session-factory>
 </hibernate-configuration>
