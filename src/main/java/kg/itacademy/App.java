@@ -8,6 +8,10 @@ import kg.itacademy.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,43 +23,84 @@ public class App
 {
     public static void main( String[] args )
     {
-        Employee e1 = new Employee("Aidin", 19, 1000);
-        Employee e2 = new Employee("Askhat", 28, 500);
-        Employee e3 = new Employee("Pasha", 28, 2000);
-        Employee e4 = new Employee("Dastan", 28, 1200);
-        Department itDepartment = new Department("IT");
-        Department marketingDepartment = new Department("Marketing");
-        Country kg = new Country("KG");
-        Country kz = new Country("KZ");
-        Country uz = new Country("UZ");
-        Country ru = new Country("RU");
+//        Employee e1 = new Employee("Aidin", 19, 1000);
+//        Employee e2 = new Employee("Askhat", 28, 500);
+//        Employee e3 = new Employee("Pasha", 28, 2000);
+//        Employee e4 = new Employee("Dastan", 28, 1200);
+//        Employee prEmployee = new Employee("PR Employee", 29, 1000);
+//
+//        create(prEmployee);
+//        Department itDepartment = new Department("IT");
+//        Department marketingDepartment = new Department("Marketing");
+//        Department prDepartment = new Department("PR");
+//        create(prDepartment);
+//        prEmployee.setDepartment(prDepartment);
+//
+//        Country kg = new Country("KG");
+//        Country kz = new Country("KZ");
+//        Country uz = new Country("UZ");
+//        Country ru = new Country("RU");
+//
+//        e1.setDepartment(itDepartment);
+//        e2.setDepartment(marketingDepartment);
+//        e3.setDepartment(marketingDepartment);
+//        e4.setDepartment(marketingDepartment);
+//        e1.setCountry(kg);
+//        e2.setCountry(ru);
+//        e3.setCountry(kz);
+//        e4.setCountry(kg);
+//        prEmployee.setCountry(uz);
+//
+//        create(kg);
+//        create(kz);
+//        create(uz);
+//        create(ru);
+//        create(itDepartment);
+//        create(marketingDepartment);
+//        create(e1);
+//        create(e2);
+//        create(e3);
+//        create(e4);
+//        create(prEmployee);
 
-        e1.setDepartment(itDepartment);
-        e2.setDepartment(marketingDepartment);
-        e3.setDepartment(marketingDepartment);
-        e4.setDepartment(marketingDepartment);
-        e1.setCountry(kg);
-        e2.setCountry(kg);
-        e3.setCountry(kg);
-        e4.setCountry(kg);
 
-        create(kg);
-        create(kz);
-        create(uz);
-        create(ru);
-        create(itDepartment);
-        create(marketingDepartment);
-        create(e1);
-        create(e2);
-        create(e3);
-        create(e4);
-//        System.out.println(getAllByDepartmentNameAndCountryName(itDepartment.getName(), kg.getName()));
-//        System.out.println(getAllByCountryName(kg.getName()));
-        System.out.println(get3BySalary());
+//        nonFetch();
+//        System.err.println();
+//        fetch();
 
-        HashMap<Integer, String> map = new HashMap<>();
-        map.keySet().stream().filter(x -> x > 5).forEach(x ->map.get(x));
-        //HibernateUtil.shutdown();
+        getAllKGAndMoreThan18();
+    }
+
+    public static void getAllKGAndMoreThan18() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Employee> query = cb.createQuery(Employee.class);
+        Root<Employee> employeeRoot = query.from(Employee.class);
+        query.select(employeeRoot)
+                .where(cb.and(cb.between(employeeRoot.get("age"),20, 60),
+                        cb.equal(employeeRoot.get("country").get("name"),"KG")));
+        TypedQuery<Employee> employeeTypedQuery = session.createQuery(query);
+        List<Employee> employees = employeeTypedQuery.getResultList();
+        System.out.println(employees);
+    }
+
+    public static void nonFetch() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        org.hibernate.query.Query query = session.createQuery("select e from Employee e join e.department");
+        List<Employee> employees = query.getResultList();
+        for(Employee e : employees) {
+            System.out.println(e.getId() + " " + e.getName() + " " + e.getDepartment().getName()) ;
+        }
+        session.close();
+    }
+    public static void fetch() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        org.hibernate.query.Query query = session.createQuery("select e from Employee e join fetch e.department");
+        List<Employee> employees = query.getResultList();
+        for(Employee e : employees) {
+            System.out.println(e.getId() + " " + e.getName() + " " + e.getDepartment().getName()) ;
+        }
+        session.close();
     }
 
     public static List<Department> getAllByCountryName(String countryName) {
